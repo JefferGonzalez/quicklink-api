@@ -8,6 +8,6 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "ignorePatterns": ["api/**/*"],
+  "ignorePatterns": ["api/**/*", "dist/**/*", "node_modules/**/*"],
   "rules": {}
 }
