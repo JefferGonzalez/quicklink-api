@@ -1,5 +1,5 @@
 import config from '@/config'
-import prisma from '@/db/client'
+import slugRouter from '@/routes/slug'
 import express, { type Application, type Request, type Response } from 'express'
 
 const app: Application = express()
@@ -7,11 +7,14 @@ const app: Application = express()
 // Settings
 app.set('port', config.PORT)
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-app.get('/', async (_: Request, res: Response) => {
-  const slugs = await prisma.slug.findMany()
+// Middlewares
+app.use(express.json())
 
-  res.status(200).json(slugs)
+// Routes
+app.get('/', (_: Request, res: Response) => {
+  res.send('⚙️ Set up project with PERN Stack and TypeScript')
 })
+
+app.use('/api', slugRouter)
 
 export default app
