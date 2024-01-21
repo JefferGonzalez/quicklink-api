@@ -8,7 +8,8 @@
     "clean": "rimraf dist",
     "build": "npm run clean && tsc && resolve-tspaths",
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "prisma:generate": "prisma generate"
   },
   "author": {
     "name": "Jefferson David González Cely",
@@ -20,6 +21,7 @@
     "url": "https://github.com/JefferGonzalez/url-slug-api/issues"
   },
   "dependencies": {
+    "@prisma/client": "5.8.1",
     "dotenv": "16.3.1",
     "express": "4.18.2"
   },
@@ -34,6 +36,7 @@
     "eslint-plugin-n": "16.0.0",
     "eslint-plugin-promise": "6.0.0",
     "nodemon": "3.0.3",
+    "prisma": "5.8.1",
     "resolve-tspaths": "0.8.17",
     "rimraf": "5.0.5",
     "ts-node-dev": "2.0.0",
