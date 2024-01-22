@@ -12,6 +12,6 @@ model slug {
   id          String   @id @default(uuid())
   url         String   @db.VarChar(255)
   slug        String   @db.VarChar(255)
-  description String?  @db.VarChar(255)
+  description String   @default("No description") @db.VarChar(255)
   created_at  DateTime @default(now())
 }

@@ -1,5 +1,5 @@
 import prisma from '@/db/client'
-import { type Slug } from '@/types'
+import { type Slug } from '@/schemas/Slug'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { type Request, type Response } from 'express'
 
@@ -7,7 +7,7 @@ export const findAll = async (_: Request, res: Response): Promise<Response> => {
   try {
     const slugs = await prisma.slug.findMany()
 
-    return res.status(200).json(slugs)
+    return res.status(200).json({ data: slugs })
   } catch (error) {
     return res.status(500).json({ error })
   }
@@ -24,10 +24,10 @@ export const findOne = async (
     })
 
     if (slug === null) {
-      return res.status(404).json({ error: 'Not found' })
+      return res.status(404).json({ errors: ['Not found'] })
     }
 
-    return res.status(200).json(slug)
+    return res.status(200).json({ data: slug })
   } catch (error) {
     return res.status(500).json({ error })
   }
@@ -52,7 +52,7 @@ export const create = async (
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
-        return res.status(400).json({ error: 'Slug already exists' })
+        return res.status(409).json({ errors: ['Slug already exists'] })
       }
     }
     return res.status(500).json({ error })

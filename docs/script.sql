@@ -4,6 +4,6 @@ CREATE TABLE IF NOT EXISTS slug (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   url VARCHAR(255),
   slug VARCHAR(255) UNIQUE,
-  description VARCHAR(255) NULL,
+  description VARCHAR(255) DEFAULT 'No description',
   created_at DATE NOT NULL DEFAULT CURRENT_DATE
 );

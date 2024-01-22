@@ -1,6 +1,7 @@
 import config from '@/config'
 import slugRouter from '@/routes/slug'
 import express, { type Application, type Request, type Response } from 'express'
+import { errorHandler } from '@/middlewares/errors'
 
 const app: Application = express()
 
@@ -16,5 +17,8 @@ app.get('/', (_: Request, res: Response) => {
 })
 
 app.use('/api', slugRouter)
+
+// Error handler
+app.use(errorHandler)
 
 export default app
