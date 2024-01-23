@@ -2,7 +2,7 @@ import { initAuth } from '@/auth'
 import config from '@/config'
 import { errorHandler } from '@/middlewares/errors'
 import authRouter from '@/routes/auth'
-import slugRouter from '@/routes/slug'
+import slugsRouter from '@/routes/slugs'
 import express, { type Application, type Request, type Response } from 'express'
 
 const app: Application = express()
@@ -21,7 +21,7 @@ app.get('/', (_: Request, res: Response) => {
 })
 
 app.use('/auth', authRouter)
-app.use('/api', slugRouter)
+app.use('/api', slugsRouter)
 
 // Error handler
 app.use(errorHandler)

@@ -1,4 +1,4 @@
-import { create, findAll, findOne, remove, update } from '@/controllers/slug'
+import { create, findAll, findOne, remove, update } from '@/controllers/slugs'
 import { validateSchema } from '@/middlewares/validator'
 import { SlugId, SlugSchema, SlugSchemaWithoutSlug } from '@/schemas/Slug'
 import { Router } from 'express'

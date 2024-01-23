@@ -5,7 +5,7 @@ import { type Request, type Response } from 'express'
 
 export const findAll = async (_: Request, res: Response): Promise<Response> => {
   try {
-    const slugs = await prisma.slug.findMany()
+    const slugs = await prisma.slugs.findMany()
 
     return res.status(200).json({ data: slugs })
   } catch (error) {
@@ -19,7 +19,7 @@ export const findOne = async (
 ): Promise<Response> => {
   const { id } = req.params
   try {
-    const slug = await prisma.slug.findUnique({
+    const slug = await prisma.slugs.findUnique({
       where: { id }
     })
 
@@ -40,11 +40,12 @@ export const create = async (
   try {
     const { slug, url, description }: Slug = req.body
 
-    const newSlug = await prisma.slug.create({
+    const newSlug = await prisma.slugs.create({
       data: {
         slug,
         url,
-        description
+        description,
+        user_id: ''
       }
     })
 
@@ -68,7 +69,7 @@ export const update = async (
 
     const { url, description }: Slug = req.body
 
-    const slug = await prisma.slug.update({
+    const slug = await prisma.slugs.update({
       data: {
         description,
         url
@@ -89,7 +90,7 @@ export const remove = async (
   try {
     const { id } = req.params
 
-    await prisma.slug.delete({
+    await prisma.slugs.delete({
       where: { id }
     })
 
