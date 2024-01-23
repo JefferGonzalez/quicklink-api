@@ -23,4 +23,23 @@ router.get(
   }
 )
 
+router.get(
+  '/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    session: false
+  })
+)
+
+router.get(
+  '/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: config.FAILURE_REDIRECT_URL,
+    session: false
+  }),
+  (req: Request, res: Response) => {
+    res.status(200).json(req.user)
+  }
+)
+
 export default router
