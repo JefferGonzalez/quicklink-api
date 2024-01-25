@@ -1,9 +1,10 @@
 import { type PayloadError } from '@/types'
+import { Boom } from '@hapi/boom'
 import { type NextFunction, type Request, type Response } from 'express'
 import { ZodError } from 'zod'
 
 export const errorHandler = (
-  error: Error | ZodError,
+  error: Error | ZodError | Boom,
   _: Request,
   res: Response,
   next: NextFunction
@@ -19,6 +20,25 @@ export const errorHandler = (
     }
 
     return res.status(400).json(payload)
+  }
+
+  if (error instanceof Boom) {
+    const {
+      output: {
+        statusCode,
+        payload: { message }
+      }
+    } = error
+
+    const payload: PayloadError = {
+      errors: [
+        {
+          message
+        }
+      ]
+    }
+
+    res.status(statusCode).json(payload)
   }
 
   next()

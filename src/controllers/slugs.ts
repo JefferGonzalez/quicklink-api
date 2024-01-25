@@ -1,13 +1,15 @@
 import prisma from '@/db/client'
 import { type Slug } from '@/schemas/Slug'
 import { verifyToken } from '@/utils/jwt'
+import { conflict, notFound, unauthorized } from '@hapi/boom'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { type Request, type Response } from 'express'
+import { type NextFunction, type Request, type Response } from 'express'
 
 export const findAll = async (
   req: Request,
-  res: Response
-): Promise<Response> => {
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   try {
     const token = req.headers.authorization?.slice(7) ?? ''
 
@@ -21,14 +23,15 @@ export const findAll = async (
 
     return res.status(200).json({ data: slugs })
   } catch (error) {
-    return res.status(500).json({ error })
+    next(error)
   }
 }
 
 export const findOne = async (
   req: Request,
-  res: Response
-): Promise<Response> => {
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   const { id } = req.params
   try {
     const token = req.headers.authorization?.slice(7) ?? ''
@@ -39,20 +42,19 @@ export const findOne = async (
       where: { id, AND: { user_id: sub } }
     })
 
-    if (slug === null) {
-      return res.status(404).json({ errors: ['Not found'] })
-    }
+    if (slug === null) throw notFound('Not found')
 
     return res.status(200).json({ data: slug })
   } catch (error) {
-    return res.status(500).json({ error })
+    next(error)
   }
 }
 
 export const create = async (
   req: Request,
-  res: Response
-): Promise<Response> => {
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   try {
     const token = req.headers.authorization?.slice(7) ?? ''
 
@@ -77,19 +79,20 @@ export const create = async (
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
-        return res.status(409).json({ errors: ['Slug already exists'] })
+        next(conflict('Slug already exists'))
       } else if (error.code === 'P2003' || error.code === 'P2023') {
-        return res.status(401).json({ errors: ['Unauthorized'] })
+        next(unauthorized('Unauthorized'))
       }
     }
-    return res.status(500).json({ error })
+    next(error)
   }
 }
 
 export const update = async (
   req: Request,
-  res: Response
-): Promise<Response> => {
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   try {
     const token = req.headers.authorization?.slice(7) ?? ''
 
@@ -115,19 +118,20 @@ export const update = async (
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === 'P2003' || error.code === 'P2023') {
-        return res.status(401).json({ errors: ['Unauthorized'] })
+        next(unauthorized('Unauthorized'))
       } else if (error.code === 'P2025') {
-        return res.status(404).json({ errors: ['Not found'] })
+        next(notFound('Not found'))
       }
     }
-    return res.status(500).json({ error })
+    next(error)
   }
 }
 
 export const remove = async (
   req: Request,
-  res: Response
-): Promise<Response> => {
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   try {
     const token = req.headers.authorization?.slice(7) ?? ''
 
@@ -143,11 +147,11 @@ export const remove = async (
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === 'P2003' || error.code === 'P2023') {
-        return res.status(401).json({ errors: ['Unauthorized'] })
+        next(unauthorized('Unauthorized'))
       } else if (error.code === 'P2025') {
-        return res.status(404).json({ errors: ['Not found'] })
+        next(notFound('Not found'))
       }
     }
-    return res.status(500).json({ error })
+    next(error)
   }
 }

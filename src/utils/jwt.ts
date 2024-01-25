@@ -1,4 +1,5 @@
 import config from '@/config'
+import { badImplementation, unauthorized } from '@hapi/boom'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 
 export const generateToken = (userId: string): string => {
@@ -13,7 +14,7 @@ export const generateToken = (userId: string): string => {
 
     return token
   } catch (error) {
-    throw new Error('Error generating token')
+    throw badImplementation('Internal server error')
   }
 }
 
@@ -23,6 +24,6 @@ export const verifyToken = (token: string): JwtPayload => {
 
     return payload as JwtPayload
   } catch (error) {
-    throw new Error('Error verifying token')
+    throw unauthorized('Unauthorized')
   }
 }

@@ -1,7 +1,8 @@
 import prisma from '@/db/client'
 import { type GitHubProfile } from '@/types'
 import { generateToken } from '@/utils/jwt'
-import { type Request, type Response } from 'express'
+import { unauthorized } from '@hapi/boom'
+import { type NextFunction, type Request, type Response } from 'express'
 import { type Profile } from 'passport-google-oauth20'
 
 export interface User {
@@ -10,14 +11,13 @@ export interface User {
 
 export const findOrCreate = async (
   req: Request,
-  res: Response
-): Promise<Response> => {
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
   try {
     const data: User | undefined = req?.user
 
-    if (data?.profile === undefined) {
-      return res.status(401).json({ errors: ['Unauthorized'] })
-    }
+    if (data?.profile === undefined) throw unauthorized('Unauthorized')
 
     const { profile } = data
 
@@ -58,6 +58,6 @@ export const findOrCreate = async (
 
     return res.status(200).json({ data: token })
   } catch (error) {
-    return res.status(500).json({ error })
+    next(error)
   }
 }

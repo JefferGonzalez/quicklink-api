@@ -1,6 +1,6 @@
 interface Errors {
   message: string
-  path: Array<string | number>
+  path?: Array<string | number>
 }
 
 export interface PayloadError {
