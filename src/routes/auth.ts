@@ -1,5 +1,6 @@
 import config from '@/config'
-import { type Request, type Response, Router } from 'express'
+import { findOrCreate } from '@/controllers/users'
+import { Router } from 'express'
 import passport from 'passport'
 
 const router = Router()
@@ -18,9 +19,7 @@ router.get(
     failureRedirect: config.FAILURE_REDIRECT_URL,
     session: false
   }),
-  (req: Request, res: Response) => {
-    res.status(200).json(req.user)
-  }
+  findOrCreate
 )
 
 router.get(
@@ -37,9 +36,7 @@ router.get(
     failureRedirect: config.FAILURE_REDIRECT_URL,
     session: false
   }),
-  (req: Request, res: Response) => {
-    res.status(200).json(req.user)
-  }
+  findOrCreate
 )
 
 export default router

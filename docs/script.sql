@@ -9,6 +9,15 @@ CREATE TABLE IF NOT EXISTS slugs (
   user_id UUID NOT NULL
 );
 
+DROP TABLE IF EXISTS accounts;
+
+CREATE TABLE IF NOT EXISTS accounts(
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  provider VARCHAR(12) NOT NULL,
+  provider_id VARCHAR(255) NOT NULL UNIQUE,
+  user_id UUID NOT NULL
+);
+
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE IF NOT EXISTS users(
@@ -23,3 +32,8 @@ ALTER TABLE
   slugs
 ADD
   CONSTRAINT fk_users_slugs FOREIGN KEY(user_id) REFERENCES users(id);
+
+ALTER TABLE
+  accounts
+ADD
+  CONSTRAINT fk_users_accounts FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE;

@@ -4,6 +4,7 @@ import { errorHandler } from '@/middlewares/errors'
 import authRouter from '@/routes/auth'
 import slugsRouter from '@/routes/slugs'
 import express, { type Application, type Request, type Response } from 'express'
+import passport from 'passport'
 
 const app: Application = express()
 
@@ -21,6 +22,7 @@ app.get('/', (_: Request, res: Response) => {
 })
 
 app.use('/auth', authRouter)
+app.use(passport.authenticate('jwt', { session: false }))
 app.use('/api', slugsRouter)
 
 // Error handler
