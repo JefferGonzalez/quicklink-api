@@ -11,7 +11,7 @@ export const findAll = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.headers.authorization?.slice(7) ?? ''
+    const token = req.cookies.token ?? ''
 
     const { sub } = verifyToken(token)
 
@@ -34,7 +34,7 @@ export const findOne = async (
 ): Promise<Response | void> => {
   const { id } = req.params
   try {
-    const token = req.headers.authorization?.slice(7) ?? ''
+    const token = req.cookies.token ?? ''
 
     const { sub } = verifyToken(token)
 
@@ -56,7 +56,7 @@ export const create = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.headers.authorization?.slice(7) ?? ''
+    const token = req.cookies.token ?? ''
 
     const { sub = '' } = verifyToken(token)
 
@@ -75,7 +75,7 @@ export const create = async (
       }
     })
 
-    return res.status(200).json({ data: newSlug })
+    return res.status(201).json({ data: newSlug })
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
@@ -94,7 +94,7 @@ export const update = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.headers.authorization?.slice(7) ?? ''
+    const token = req.cookies.token ?? ''
 
     const { sub = '' } = verifyToken(token)
 
@@ -133,7 +133,7 @@ export const remove = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.headers.authorization?.slice(7) ?? ''
+    const token = req.cookies.token ?? ''
 
     const { sub = '' } = verifyToken(token)
 

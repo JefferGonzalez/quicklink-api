@@ -1,7 +1,8 @@
+import config from '@/config'
 import prisma from '@/db/client'
 import { type GitHubProfile } from '@/types'
-import { generateToken } from '@/utils/jwt'
-import { unauthorized } from '@hapi/boom'
+import { generateToken, verifyToken } from '@/utils/jwt'
+import { notFound, unauthorized } from '@hapi/boom'
 import { type NextFunction, type Request, type Response } from 'express'
 import { type Profile } from 'passport-google-oauth20'
 
@@ -55,8 +56,44 @@ export const findOrCreate = async (
     }
 
     const token = generateToken(userId)
+    const date = new Date(Date.now() + Number(config.JSON_WEB_TOKEN_EXPIRES_IN))
 
-    return res.status(200).json({ data: token })
+    res
+      .cookie('token', token, {
+        httpOnly: true,
+        expires: date,
+        sameSite: 'none',
+        path: '/',
+        secure: true
+      })
+      .redirect(config.CLIENT_URL)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const findOne = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const token = req.cookies.token ?? ''
+
+    const { sub } = verifyToken(token)
+
+    const user = await prisma.users.findUnique({
+      where: { id: sub },
+      select: {
+        name: true,
+        username: true,
+        photo: true
+      }
+    })
+
+    if (user === null) throw notFound('Not found')
+
+    return res.status(200).json({ data: user })
   } catch (error) {
     next(error)
   }

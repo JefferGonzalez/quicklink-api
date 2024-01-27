@@ -13,5 +13,6 @@ export default {
   GOOGLE_CLIENT_SECRET: process?.env?.GOOGLE_CLIENT_SECRET ?? '',
   GOOGLE_CALLBACK_URL: process?.env?.GOOGLE_CALLBACK_URL ?? '',
   JSON_WEB_TOKEN_SECRET: process?.env?.JSON_WEB_TOKEN_SECRET ?? '',
-  JSON_WEB_TOKEN_EXPIRES_IN: process?.env?.JSON_WEB_TOKEN_EXPIRES_IN ?? ''
+  JSON_WEB_TOKEN_EXPIRES_IN: process?.env?.JSON_WEB_TOKEN_EXPIRES_IN ?? 86400,
+  CLIENT_URL: process?.env?.CLIENT_URL ?? ''
 }

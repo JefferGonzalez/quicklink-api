@@ -1,6 +1,6 @@
 import config from '@/config'
 import { findOrCreate } from '@/controllers/users'
-import { Router } from 'express'
+import { Router, type Request, type Response } from 'express'
 import passport from 'passport'
 
 const router = Router()
@@ -38,5 +38,9 @@ router.get(
   }),
   findOrCreate
 )
+
+router.get('/logout', (_: Request, res: Response) => {
+  res.clearCookie('token', { path: '/' }).sendStatus(200)
+})
 
 export default router

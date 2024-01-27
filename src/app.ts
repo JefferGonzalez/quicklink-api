@@ -3,6 +3,9 @@ import config from '@/config'
 import { errorHandler } from '@/middlewares/errors'
 import authRouter from '@/routes/auth'
 import slugsRouter from '@/routes/slugs'
+import usersRouter from '@/routes/users'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
 import express, { type Application, type Request, type Response } from 'express'
 import passport from 'passport'
 
@@ -15,6 +18,14 @@ app.set('port', config.PORT)
 
 // Middlewares
 app.use(express.json())
+app.use(
+  cors({
+    origin: config.CLIENT_URL,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    credentials: true
+  })
+)
+app.use(cookieParser())
 
 // Routes
 app.get('/', (_: Request, res: Response) => {
@@ -23,6 +34,7 @@ app.get('/', (_: Request, res: Response) => {
 
 app.use('/auth', authRouter)
 app.use(passport.authenticate('jwt', { session: false }))
+app.use('/api', usersRouter)
 app.use('/api', slugsRouter)
 
 // Error handler
