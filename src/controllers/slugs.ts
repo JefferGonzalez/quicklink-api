@@ -18,6 +18,13 @@ export const findAll = async (
     const slugs = await prisma.slugs.findMany({
       where: {
         user_id: sub
+      },
+      select: {
+        id: true,
+        url: true,
+        slug: true,
+        description: true,
+        created_at: true
       }
     })
 
@@ -39,7 +46,14 @@ export const findOne = async (
     const { sub } = verifyToken(token)
 
     const slug = await prisma.slugs.findUnique({
-      where: { id, AND: { user_id: sub } }
+      where: { id, AND: { user_id: sub } },
+      select: {
+        id: true,
+        url: true,
+        slug: true,
+        description: true,
+        created_at: true
+      }
     })
 
     if (slug === null) throw notFound('Not found')
@@ -72,6 +86,9 @@ export const create = async (
         url,
         description,
         user_id: sub
+      },
+      select: {
+        id: true
       }
     })
 
@@ -111,7 +128,10 @@ export const update = async (
         description,
         url
       },
-      where: { id, AND: { user_id: sub } }
+      where: { id, AND: { user_id: sub } },
+      select: {
+        id: true
+      }
     })
 
     return res.status(200).json({ data: slug })
