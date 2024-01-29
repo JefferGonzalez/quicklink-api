@@ -35,3 +35,11 @@ model accounts {
   user_id     String @db.VarChar(255)
   user        users  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
+
+// Schema for the free tier
+model slug {
+  id         String   @id @default(uuid())
+  url        String   @db.VarChar(255)
+  slug       String   @unique @db.VarChar(255)
+  expired_at DateTime @db.Timestamp(6)
+}
