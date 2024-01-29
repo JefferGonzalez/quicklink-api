@@ -2,6 +2,7 @@ import { initAuth } from '@/auth'
 import config from '@/config'
 import { errorHandler } from '@/middlewares/errors'
 import authRouter from '@/routes/auth'
+import slugRouter from '@/routes/slug'
 import slugsRouter from '@/routes/slugs'
 import usersRouter from '@/routes/users'
 import cookieParser from 'cookie-parser'
@@ -33,6 +34,7 @@ app.get('/', (_: Request, res: Response) => {
 })
 
 app.use('/auth', authRouter)
+app.use('/api', slugRouter)
 app.use(passport.authenticate('jwt', { session: false }))
 app.use('/api', usersRouter)
 app.use('/api', slugsRouter)
