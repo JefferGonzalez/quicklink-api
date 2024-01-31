@@ -92,3 +92,25 @@ export const create = async (
     next(error)
   }
 }
+
+export const removeAll = async (
+  _: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const date = new Date(Date.now())
+
+    await prisma.slug.deleteMany({
+      where: {
+        expired_at: {
+          lt: date
+        }
+      }
+    })
+
+    return res.sendStatus(200)
+  } catch (error) {
+    next(error)
+  }
+}

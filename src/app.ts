@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express, { type Application, type Request, type Response } from 'express'
 import passport from 'passport'
+import { removeAll } from './controllers/slug'
 
 const app: Application = express()
 
@@ -32,6 +33,8 @@ app.use(cookieParser())
 app.get('/', (_: Request, res: Response) => {
   res.send('⚙️ Set up project with PERN Stack and TypeScript')
 })
+
+app.use('/cron/slugs', removeAll)
 
 app.use('/auth', authRouter)
 app.use('/api', slugRouter)
