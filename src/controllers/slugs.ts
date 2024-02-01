@@ -15,10 +15,14 @@ export const findAll = async (
 
     const { sub } = verifyToken(token)
 
+    const { page = 0 } = req.query
+
     const slugs = await prisma.slugs.findMany({
       where: {
         user_id: sub
       },
+      skip: Number(page) * 6,
+      take: 6,
       select: {
         id: true,
         url: true,
@@ -28,7 +32,20 @@ export const findAll = async (
       }
     })
 
-    return res.status(200).json({ data: slugs })
+    const count = await prisma.slugs.count({
+      where: {
+        user_id: sub
+      }
+    })
+
+    const response = {
+      data: slugs,
+      info: {
+        pages: Math.ceil(count / 6)
+      }
+    }
+
+    return res.status(200).json(response)
   } catch (error) {
     next(error)
   }
