@@ -6,8 +6,8 @@
   "scripts": {
     "tsc": "tsc --init",
     "clean": "rimraf dist",
-    "build": "npm run clean && tsc && resolve-tspaths",
-    "dev": "prisma generate && ts-node-dev -r tsconfig-paths/register src/index.ts",
+    "build": "npm run clean && tsc && resolve-tspaths && npm run prisma:generate",
+    "dev": "npm run prisma:generate && ts-node-dev -r tsconfig-paths/register src/index.ts",
     "start": "node dist/index.js",
     "prisma:generate": "prisma generate"
   },
