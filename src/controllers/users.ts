@@ -1,5 +1,6 @@
 import config from '@/config'
 import prisma from '@/db/client'
+import { type Profile as UserProfile } from '@/schemas/Profile'
 import { type GitHubProfile } from '@/types'
 import { generateToken, verifyToken } from '@/utils/jwt'
 import { notFound, unauthorized } from '@hapi/boom'
@@ -92,6 +93,37 @@ export const findOne = async (
     })
 
     if (user === null) throw notFound('Not found')
+
+    return res.status(200).json({ data: user })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const token = req.cookies.token ?? ''
+
+    const { sub } = verifyToken(token)
+
+    const { name, username }: UserProfile = req.body
+
+    const user = await prisma.users.update({
+      where: { id: sub },
+      data: {
+        name,
+        username
+      },
+      select: {
+        name: true,
+        username: true,
+        photo: true
+      }
+    })
 
     return res.status(200).json({ data: user })
   } catch (error) {
