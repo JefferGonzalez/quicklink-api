@@ -94,11 +94,15 @@ export const create = async (
 }
 
 export const removeAll = async (
-  _: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
   try {
+    if (req.headers.Authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+      return res.sendStatus(401)
+    }
+
     const date = new Date(Date.now())
 
     await prisma.slug.deleteMany({
