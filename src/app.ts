@@ -1,5 +1,6 @@
 import { initAuth } from '@/auth'
 import config from '@/config'
+import { removeAll } from '@/controllers/slug'
 import { errorHandler } from '@/middlewares/errors'
 import authRouter from '@/routes/auth'
 import slugRouter from '@/routes/slug'
@@ -9,7 +10,6 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express, { type Application, type Request, type Response } from 'express'
 import passport from 'passport'
-import { removeAll } from './controllers/slug'
 
 const app: Application = express()
 
@@ -31,7 +31,7 @@ app.use(cookieParser())
 
 // Routes
 app.get('/', (_: Request, res: Response) => {
-  res.send('⚙️ Set up project with PERN Stack and TypeScript')
+  res.redirect(config.CLIENT_URL)
 })
 
 app.use('/cron/slugs', removeAll)
@@ -41,6 +41,11 @@ app.use('/api', slugRouter)
 app.use(passport.authenticate('jwt', { session: false }))
 app.use('/api', usersRouter)
 app.use('/api', slugsRouter)
+
+app.use((req: Request, res: Response) => {
+  const page = `${config.CLIENT_URL + req.url}`
+  res.redirect(page)
+})
 
 // Error handler
 app.use(errorHandler)
