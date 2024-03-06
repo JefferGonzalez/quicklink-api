@@ -37,10 +37,10 @@ app.get('/', (_: Request, res: Response) => {
 app.use('/cron/slugs', removeAll)
 
 app.use('/auth', authRouter)
-app.use('/api', slugRouter)
+app.use(slugRouter)
 app.use(passport.authenticate('jwt', { session: false }))
-app.use('/api', usersRouter)
-app.use('/api', slugsRouter)
+app.use(usersRouter)
+app.use(slugsRouter)
 
 app.use((req: Request, res: Response) => {
   const page = `${config.CLIENT_URL + req.url}`
