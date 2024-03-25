@@ -1,5 +1,5 @@
 {
-  "name": "url-slug-api",
+  "name": "quicklink-api",
   "version": "1.0.0",
   "description": "🌱 An open-source URL shortener built with PERN Stack",
   "main": "src/index.ts",
@@ -18,7 +18,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/JefferGonzalez/url-slug-api/issues"
+    "url": "https://github.com/jefferGonzalez/quicklink-api/issues"
   },
   "dependencies": {
     "@hapi/boom": "10.0.1",
