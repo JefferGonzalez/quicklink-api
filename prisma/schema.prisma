@@ -15,7 +15,7 @@ model slugs {
   description String   @default("No description") @db.VarChar(255)
   created_at  DateTime @default(now()) @db.Timestamp(6)
   user_id     String
-  user        users    @relation(fields: [user_id], references: [id])
+  user        users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model users {

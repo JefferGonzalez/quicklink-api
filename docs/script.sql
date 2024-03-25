@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS slug (
 ALTER TABLE
   slugs
 ADD
-  CONSTRAINT fk_users_slugs FOREIGN KEY(user_id) REFERENCES users(id);
+  CONSTRAINT fk_users_slugs FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 ALTER TABLE
   accounts

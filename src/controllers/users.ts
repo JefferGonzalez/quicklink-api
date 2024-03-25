@@ -130,3 +130,25 @@ export const update = async (
     next(error)
   }
 }
+
+export const remove = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const token = req.cookies.token ?? ''
+
+    const { sub } = verifyToken(token)
+
+    if (sub === undefined) throw unauthorized('Unauthorized')
+
+    await prisma.users.delete({
+      where: { id: sub }
+    })
+
+    return res.status(204).end()
+  } catch (error) {
+    next(error)
+  }
+}
