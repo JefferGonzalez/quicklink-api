@@ -2,6 +2,7 @@ import config from '@/config'
 import prisma from '@/db/client'
 import { type Profile as UserProfile } from '@/schemas/Profile'
 import { type GitHubProfile } from '@/types'
+import { COOKIE_SETTINGS } from '@/utils/cookie'
 import { generateToken, verifyToken } from '@/utils/jwt'
 import { notFound, unauthorized } from '@hapi/boom'
 import { type NextFunction, type Request, type Response } from 'express'
@@ -57,15 +58,11 @@ export const findOrCreate = async (
     }
 
     const token = generateToken(userId)
-    const date = new Date(Date.now() + Number(config.JSON_WEB_TOKEN_EXPIRES_IN))
 
     res
       .cookie('token', token, {
-        httpOnly: true,
-        expires: date,
-        sameSite: 'none',
-        path: '/',
-        secure: true
+        ...COOKIE_SETTINGS,
+        maxAge: Number(config.SESSION_AGE)
       })
       .redirect(config.CLIENT_URL)
   } catch (error) {

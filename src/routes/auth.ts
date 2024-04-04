@@ -1,5 +1,6 @@
 import config from '@/config'
 import { findOrCreate } from '@/controllers/users'
+import { COOKIE_SETTINGS } from '@/utils/cookie'
 import { Router, type Request, type Response } from 'express'
 import passport from 'passport'
 
@@ -40,7 +41,7 @@ router.get(
 )
 
 router.get('/logout', (_: Request, res: Response) => {
-  res.clearCookie('token', { path: '/' }).sendStatus(200)
+  res.clearCookie('token', COOKIE_SETTINGS).sendStatus(200)
 })
 
 export default router
