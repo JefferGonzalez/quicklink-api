@@ -58,3 +58,11 @@ interface JSON {
 interface Photo {
   value: string
 }
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId: string
+    }
+  }
+}

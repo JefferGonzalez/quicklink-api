@@ -1,6 +1,7 @@
 import { initAuth } from '@/auth'
 import config from '@/config'
 import { removeAll } from '@/controllers/slug'
+import { tokenExtractor } from '@/middlewares/cookie'
 import { errorHandler } from '@/middlewares/errors'
 import authRouter from '@/routes/auth'
 import slugRouter from '@/routes/slug'
@@ -38,7 +39,7 @@ app.use('/cron/slugs', removeAll)
 
 app.use('/auth', authRouter)
 app.use(slugRouter)
-app.use(passport.authenticate('jwt', { session: false }))
+app.use(passport.authenticate('jwt', { session: false }), tokenExtractor())
 app.use(usersRouter)
 app.use(slugsRouter)
 

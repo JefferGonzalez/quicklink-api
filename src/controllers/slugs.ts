@@ -1,6 +1,5 @@
 import prisma from '@/db/client'
 import { type Slug } from '@/schemas/Slug'
-import { verifyToken } from '@/utils/jwt'
 import { conflict, notFound, unauthorized } from '@hapi/boom'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { type NextFunction, type Request, type Response } from 'express'
@@ -11,15 +10,13 @@ export const findAll = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token as string
-
-    const { sub } = verifyToken(token)
+    const userId = req.userId
 
     const { page = 0 } = req.query
 
     const slugs = await prisma.slugs.findMany({
       where: {
-        user_id: sub
+        user_id: userId
       },
       skip: Number(page) * 6,
       take: 6,
@@ -34,7 +31,7 @@ export const findAll = async (
 
     const count = await prisma.slugs.count({
       where: {
-        user_id: sub
+        user_id: userId
       }
     })
 
@@ -58,12 +55,10 @@ export const findOne = async (
 ): Promise<Response | void> => {
   const { id } = req.params
   try {
-    const token = req.cookies.token as string
-
-    const { sub } = verifyToken(token)
+    const userId = req.userId
 
     const slug = await prisma.slugs.findUnique({
-      where: { id, AND: { user_id: sub } },
+      where: { id, AND: { user_id: userId } },
       select: {
         id: true,
         url: true,
@@ -87,9 +82,7 @@ export const create = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token as string
-
-    const { sub = '' } = verifyToken(token)
+    const userId = req.userId
 
     const { slug, url } = req.body as Slug
 
@@ -102,7 +95,7 @@ export const create = async (
         slug,
         url,
         description,
-        user_id: sub
+        user_id: userId
       },
       select: {
         id: true
@@ -128,9 +121,7 @@ export const update = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token as string
-
-    const { sub = '' } = verifyToken(token)
+    const userId = req.userId
 
     const { id } = req.params
 
@@ -145,7 +136,7 @@ export const update = async (
         description,
         url
       },
-      where: { id, AND: { user_id: sub } },
+      where: { id, AND: { user_id: userId } },
       select: {
         id: true
       }
@@ -170,14 +161,12 @@ export const remove = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token as string
-
-    const { sub = '' } = verifyToken(token)
+    const userId = req.userId
 
     const { id } = req.params
 
     await prisma.slugs.delete({
-      where: { id, AND: { user_id: sub } }
+      where: { id, AND: { user_id: userId } }
     })
 
     return res.status(204).json({ message: 'Slug deleted' })

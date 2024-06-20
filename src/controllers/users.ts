@@ -3,7 +3,7 @@ import prisma from '@/db/client'
 import { type Profile as UserProfile } from '@/schemas/Profile'
 import { type GitHubProfile } from '@/types'
 import { COOKIE_SETTINGS } from '@/utils/cookie'
-import { generateToken, verifyToken } from '@/utils/jwt'
+import { generateToken } from '@/utils/jwt'
 import { notFound, unauthorized } from '@hapi/boom'
 import { type NextFunction, type Request, type Response } from 'express'
 import { type Profile } from 'passport-google-oauth20'
@@ -76,12 +76,10 @@ export const findOne = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token as string
-
-    const { sub } = verifyToken(token)
+    const userId = req.userId
 
     const user = await prisma.users.findUnique({
-      where: { id: sub },
+      where: { id: userId },
       select: {
         name: true,
         username: true,
@@ -103,14 +101,12 @@ export const update = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token as string
-
-    const { sub } = verifyToken(token)
+    const userId = req.userId
 
     const { name, username } = req.body as UserProfile
 
     const user = await prisma.users.update({
-      where: { id: sub },
+      where: { id: userId },
       data: {
         name,
         username
@@ -134,14 +130,10 @@ export const remove = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token as string
-
-    const { sub } = verifyToken(token)
-
-    if (sub === undefined) throw unauthorized('Unauthorized')
+    const userId = req.userId
 
     await prisma.users.delete({
-      where: { id: sub }
+      where: { id: userId }
     })
 
     return res.status(204).end()
