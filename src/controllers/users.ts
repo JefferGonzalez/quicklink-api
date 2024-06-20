@@ -18,7 +18,7 @@ export const findOrCreate = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const data: User | undefined = req?.user
+    const data: User | undefined = req.user
 
     if (data?.profile === undefined) throw unauthorized('Unauthorized')
 
@@ -76,7 +76,7 @@ export const findOne = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token ?? ''
+    const token = req.cookies.token as string
 
     const { sub } = verifyToken(token)
 
@@ -103,11 +103,11 @@ export const update = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token ?? ''
+    const token = req.cookies.token as string
 
     const { sub } = verifyToken(token)
 
-    const { name, username }: UserProfile = req.body
+    const { name, username } = req.body as UserProfile
 
     const user = await prisma.users.update({
       where: { id: sub },
@@ -134,7 +134,7 @@ export const remove = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token ?? ''
+    const token = req.cookies.token as string
 
     const { sub } = verifyToken(token)
 

@@ -2,7 +2,7 @@ import app from '@/app'
 import config from '@/config'
 
 const init = (): void => {
-  const port = app.get('port')
+  const port = app.get('port') as string
 
   app.listen(port, () => {
     if (config.ENV === 'development') {

@@ -11,7 +11,7 @@ export const findAll = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token ?? ''
+    const token = req.cookies.token as string
 
     const { sub } = verifyToken(token)
 
@@ -58,7 +58,7 @@ export const findOne = async (
 ): Promise<Response | void> => {
   const { id } = req.params
   try {
-    const token = req.cookies.token ?? ''
+    const token = req.cookies.token as string
 
     const { sub } = verifyToken(token)
 
@@ -87,13 +87,13 @@ export const create = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token ?? ''
+    const token = req.cookies.token as string
 
     const { sub = '' } = verifyToken(token)
 
-    const { slug, url }: Slug = req.body
+    const { slug, url } = req.body as Slug
 
-    let { description }: Slug = req.body
+    let { description } = req.body as Slug
 
     description ||= 'No description'
 
@@ -128,15 +128,15 @@ export const update = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token ?? ''
+    const token = req.cookies.token as string
 
     const { sub = '' } = verifyToken(token)
 
     const { id } = req.params
 
-    const { url }: Slug = req.body
+    const { url } = req.body as Slug
 
-    let { description }: Slug = req.body
+    let { description } = req.body as Slug
 
     description ||= 'No description'
 
@@ -170,7 +170,7 @@ export const remove = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const token = req.cookies.token ?? ''
+    const token = req.cookies.token as string
 
     const { sub = '' } = verifyToken(token)
 

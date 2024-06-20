@@ -59,7 +59,7 @@ export const create = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const { slug, url }: Slug = req.body
+    const { slug, url } = req.body as Slug
 
     const data = await prisma.slugs.findUnique({
       where: { slug }
@@ -99,7 +99,9 @@ export const removeAll = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    if (req.headers.Authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+    const token = `Bearer ${process.env.CRON_SECRET ?? ''}`
+    
+    if (req.headers.Authorization !== token) {
       return res.sendStatus(401)
     }
 

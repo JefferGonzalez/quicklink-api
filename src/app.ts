@@ -16,7 +16,7 @@ const app: Application = express()
 initAuth()
 
 // Settings
-app.set('port', config.PORT)
+app.set('port', String(config.PORT))
 
 // Middlewares
 app.use(express.json())
@@ -43,7 +43,7 @@ app.use(usersRouter)
 app.use(slugsRouter)
 
 app.use((req: Request, res: Response) => {
-  const page = `${config.CLIENT_URL + req.url}`
+  const page = config.CLIENT_URL + req.url
   res.redirect(page)
 })
 
