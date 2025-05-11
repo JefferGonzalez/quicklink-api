@@ -9,7 +9,7 @@ export const generateToken = (userId: string): string => {
     }
 
     const token = jwt.sign(payload, config.JSON_WEB_TOKEN_SECRET, {
-      expiresIn: config.SESSION_AGE
+      expiresIn: Number(config.SESSION_AGE)
     })
 
     return token
