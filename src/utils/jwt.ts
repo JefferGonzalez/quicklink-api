@@ -13,7 +13,7 @@ export const generateToken = (userId: string): string => {
     })
 
     return token
-  } catch (error) {
+  } catch {
     throw badImplementation('Internal server error')
   }
 }
@@ -23,7 +23,7 @@ export const verifyToken = (token: string): JwtPayload => {
     const payload = jwt.verify(token, config.JSON_WEB_TOKEN_SECRET)
 
     return payload as JwtPayload
-  } catch (error) {
+  } catch {
     throw unauthorized('Unauthorized')
   }
 }

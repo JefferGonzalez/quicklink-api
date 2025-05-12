@@ -12,7 +12,7 @@ export default tseslint.config(
     }
   },
   {
-    ignores: ['**/dist/**', '**/api/**']
+    ignores: ['**/dist/**', '**/api/**', '**/src/db/prisma/**']
   },
 
   eslint.configs.recommended,

@@ -1,7 +1,7 @@
 import prisma from '@/db/client.js'
+import { Prisma } from '@/db/prisma/client.js'
 import { type Slug } from '@/schemas/Slug.js'
 import { conflict, notFound, unauthorized } from '@hapi/boom'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { type NextFunction, type Request, type Response } from 'express'
 
 export const findAll = async (
@@ -88,7 +88,7 @@ export const create = async (
 
     let { description } = req.body as Slug
 
-    description ||= 'No description'
+    description ??= 'No description'
 
     const newSlug = await prisma.slugs.create({
       data: {
@@ -104,7 +104,7 @@ export const create = async (
 
     return res.status(201).json({ data: newSlug })
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
         next(conflict('Slug already exists'))
       } else if (error.code === 'P2003' || error.code === 'P2023') {
@@ -129,7 +129,7 @@ export const update = async (
 
     let { description } = req.body as Slug
 
-    description ||= 'No description'
+    description ??= 'No description'
 
     const slug = await prisma.slugs.update({
       data: {
@@ -144,7 +144,7 @@ export const update = async (
 
     return res.status(200).json({ data: slug })
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2003' || error.code === 'P2023') {
         next(unauthorized('Unauthorized'))
       } else if (error.code === 'P2025') {
@@ -171,7 +171,7 @@ export const remove = async (
 
     return res.status(204).json({ message: 'Slug deleted' })
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2003' || error.code === 'P2023') {
         next(unauthorized('Unauthorized'))
       } else if (error.code === 'P2025') {

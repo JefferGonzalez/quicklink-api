@@ -1,7 +1,7 @@
 import prisma from '@/db/client.js'
+import { Prisma } from '@/db/prisma/client.js'
 import { type Slug } from '@/schemas/Slug.js'
 import { conflict, notFound } from '@hapi/boom'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { type NextFunction, type Request, type Response } from 'express'
 
 export const getSlug = async (
@@ -84,7 +84,7 @@ export const create = async (
 
     return res.status(201).json({ data: newSlug })
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
         next(conflict('Slug already exists'))
       }
