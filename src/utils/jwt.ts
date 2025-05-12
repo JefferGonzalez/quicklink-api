@@ -1,4 +1,4 @@
-import config from '@/config'
+import config from '@/config.js'
 import { badImplementation, unauthorized } from '@hapi/boom'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 

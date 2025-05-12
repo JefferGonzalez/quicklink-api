@@ -1,4 +1,4 @@
-import config from '@/config'
+import config from '@/config.js'
 import { type Strategy } from 'passport'
 import {
   Strategy as GoogleStrategy

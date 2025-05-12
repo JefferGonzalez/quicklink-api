@@ -1,6 +1,6 @@
-import { GitHub } from '@/auth/strategies/GitHub'
-import { Google } from '@/auth/strategies/Google'
-import { JSONWebToken } from '@/auth/strategies/JSONWebToken'
+import { GitHub } from '@/auth/strategies/GitHub.js'
+import { Google } from '@/auth/strategies/Google.js'
+import { JSONWebToken } from '@/auth/strategies/JSONWebToken.js'
 import passport from 'passport'
 
 export const initAuth = (): void => {

@@ -1,4 +1,4 @@
-import { type PayloadError } from '@/types'
+import { type PayloadError } from '@/types.js'
 import { Boom } from '@hapi/boom'
 import { type NextFunction, type Request, type Response } from 'express'
 import { ZodError } from 'zod'

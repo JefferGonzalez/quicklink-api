@@ -1,5 +1,5 @@
-import config from '@/config'
-import { cookieExtractor } from '@/middlewares/cookie'
+import config from '@/config.js'
+import { cookieExtractor } from '@/middlewares/cookie.js'
 import { type Strategy } from 'passport'
 import { ExtractJwt, Strategy as JSONWebTokenStrategy } from 'passport-jwt'
 

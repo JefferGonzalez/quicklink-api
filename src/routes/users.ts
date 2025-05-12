@@ -1,6 +1,6 @@
-import { findOne, remove, update } from '@/controllers/users'
-import { validateSchema } from '@/middlewares/validator'
-import { ProfileSchema } from '@/schemas/Profile'
+import { findOne, remove, update } from '@/controllers/users.js'
+import { validateSchema } from '@/middlewares/validator.js'
+import { ProfileSchema } from '@/schemas/Profile.js'
 import { Router } from 'express'
 
 const router = Router()

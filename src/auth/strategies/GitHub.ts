@@ -1,5 +1,5 @@
-import config from '@/config'
-import { type GitHubProfile } from '@/types'
+import config from '@/config.js'
+import { type GitHubProfile } from '@/types.js'
 import { type Strategy } from 'passport'
 import { Strategy as GitHubStrategy } from 'passport-github2'
 import { VerifyCallback } from 'passport-google-oauth20'

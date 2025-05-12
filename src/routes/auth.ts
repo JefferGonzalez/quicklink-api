@@ -1,6 +1,6 @@
-import config from '@/config'
-import { findOrCreate } from '@/controllers/users'
-import { COOKIE_SETTINGS } from '@/utils/cookie'
+import config from '@/config.js'
+import { findOrCreate } from '@/controllers/users.js'
+import { COOKIE_SETTINGS } from '@/utils/cookie.js'
 import { Router, type Request, type Response } from 'express'
 import passport from 'passport'
 

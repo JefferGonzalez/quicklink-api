@@ -1,6 +1,6 @@
-import { create, getSlug } from '@/controllers/slug'
-import { validateSchema } from '@/middlewares/validator'
-import { SlugSchema } from '@/schemas/Slug'
+import { create, getSlug } from '@/controllers/slug.js'
+import { validateSchema } from '@/middlewares/validator.js'
+import { SlugSchema } from '@/schemas/Slug.js'
 import { Router } from 'express'
 
 const router = Router()

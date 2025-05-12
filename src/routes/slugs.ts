@@ -1,6 +1,6 @@
-import { create, findAll, findOne, remove, update } from '@/controllers/slugs'
-import { validateSchema } from '@/middlewares/validator'
-import { SlugId, SlugSchema, SlugSchemaWithoutSlug } from '@/schemas/Slug'
+import { create, findAll, findOne, remove, update } from '@/controllers/slugs.js'
+import { validateSchema } from '@/middlewares/validator.js'
+import { SlugId, SlugSchema, SlugSchemaWithoutSlug } from '@/schemas/Slug.js'
 import { Router } from 'express'
 
 const router = Router()

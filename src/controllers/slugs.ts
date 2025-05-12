@@ -1,5 +1,5 @@
-import prisma from '@/db/client'
-import { type Slug } from '@/schemas/Slug'
+import prisma from '@/db/client.js'
+import { type Slug } from '@/schemas/Slug.js'
 import { conflict, notFound, unauthorized } from '@hapi/boom'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { type NextFunction, type Request, type Response } from 'express'

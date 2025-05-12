@@ -1,4 +1,4 @@
-import { verifyToken } from '@/utils/jwt'
+import { verifyToken } from '@/utils/jwt.js'
 import { unauthorized } from '@hapi/boom'
 import { type NextFunction, type Request, type Response } from 'express'
 
