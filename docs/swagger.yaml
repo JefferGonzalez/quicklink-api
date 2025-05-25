@@ -1,0 +1,155 @@
+openapi: 3.0.0
+info:
+  title: QuickLink API | URL Shortener Backend
+  version: 1.0.0
+  description: QuickLink API is the backend service for the QuickLink URL shortener. Built with the PERN stack (PostgreSQL, Express, React, Node.js), this RESTful API handles authentication, link creation, and all interactions with the database. It uses JWT-based authentication and cookie management to manage user sessions securely.
+  license:
+    name: MIT
+    url: https://github.com/JefferGonzalez/quicklink-api/blob/main/LICENSE
+  contact:
+    name: Jefferson David González Cely
+    url: https://www.jeffer.dev
+    email: jeffersongonzalezcely@hotmail.com
+tags:
+  - name: Slug
+    description: Short URL management
+paths:
+  /slug/{slug}:
+    get:
+      tags:
+        - Slug
+      summary: Get a short URL
+      description: Retrieve a short URL by its slug.
+      parameters:
+        - name: slug
+          in: path
+          description: The slug of the short URL to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Short URL retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: The original URL
+                    format: uri
+                  expired_at:
+                    type: string
+                    format: date-time
+                    description: Expiration date of the short URL (optional)
+                required:
+                  - url
+              example:
+                url: https://www.example.com
+                expired_at: 2025-12-31T23:59:59Z
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: Not found
+  /slug:
+    post:
+      tags:
+        - Slug
+      summary: Create a short URL
+      description: Generates a new short URL slug.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Slug'
+      responses:
+        '201':
+          description: Short URL created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 123e4567-e89b-12d3-a456-426614174000
+        '400':
+          description: Bad request - validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                        path:
+                          type: array
+                          items:
+                            type: string
+              example:
+                errors:
+                  - message: 'URL must be at least 1 character long'
+                    path: ['url']
+                  - message: 'URL must be a valid URL'
+                    path: ['url']
+                  - message: 'Slug must be at least 1 character long'
+                    path: ['slug']
+        '409':
+          description: Slug already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: Slug already exists
+components:
+  schemas:
+    Slug:
+      type: object
+      required:
+        - url
+        - slug
+      properties:
+        url:
+          type: string
+          description: The original URL to be shortened
+          format: uri
+        slug:
+          type: string
+          description: The unique identifier for the shortened URL
+        description:
+          type: string
+          description: A brief description of the project or URL
+      example:
+        url: https://www.example.com
+        slug: example-slug
+        description: This is an example project

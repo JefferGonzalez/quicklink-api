@@ -7,6 +7,7 @@ import authRouter from '@/routes/auth.js'
 import slugRouter from '@/routes/slug.js'
 import slugsRouter from '@/routes/slugs.js'
 import usersRouter from '@/routes/users.js'
+import { setupSwagger } from '@/swagger.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express, { type Application, type Request, type Response } from 'express'
@@ -29,6 +30,9 @@ app.use(
   })
 )
 app.use(cookieParser())
+
+// Swagger
+setupSwagger(app)
 
 // Routes
 app.get('/', (_: Request, res: Response) => {
