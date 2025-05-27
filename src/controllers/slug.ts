@@ -100,8 +100,8 @@ export const removeAll = async (
 ): Promise<Response | void> => {
   try {
     const token = `Bearer ${process.env.CRON_SECRET ?? ''}`
-    
-    if (req.headers.Authorization !== token) {
+
+    if (req.headers.authorization !== token) {
       return res.sendStatus(401)
     }
 
