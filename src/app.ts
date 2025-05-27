@@ -1,6 +1,7 @@
 import { initAuth } from '@/auth/index.js'
 import config from '@/config.js'
 import { removeAll } from '@/controllers/slug.js'
+import { privateCors, publicCors } from '@/cors.js'
 import { tokenExtractor } from '@/middlewares/cookie.js'
 import { errorHandler } from '@/middlewares/errors.js'
 import authRouter from '@/routes/auth.js'
@@ -9,7 +10,6 @@ import slugsRouter from '@/routes/slugs.js'
 import usersRouter from '@/routes/users.js'
 import { setupSwagger } from '@/swagger.js'
 import cookieParser from 'cookie-parser'
-import cors from 'cors'
 import express, { type Application, type Request, type Response } from 'express'
 import passport from 'passport'
 
@@ -22,27 +22,25 @@ app.set('port', String(config.PORT))
 
 // Middlewares
 app.use(express.json())
-app.use(
-  cors({
-    origin: config.CLIENT_URL,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    credentials: true
-  })
-)
 app.use(cookieParser())
 
 // Swagger
 setupSwagger(app)
 
-// Routes
+// Routes (Public)
 app.get('/', (_: Request, res: Response) => {
   res.redirect(config.CLIENT_URL)
 })
 
-app.use('/cron/slugs', removeAll)
-
-app.use('/auth', authRouter)
+app.use('/slug', publicCors)
 app.use(slugRouter)
+
+// Routes (Private)
+app.use('/cron/slugs', removeAll) // Vercel Cron Job
+
+app.use(privateCors)
+app.use('/auth', authRouter)
+
 app.use(passport.authenticate('jwt', { session: false }), tokenExtractor())
 app.use(usersRouter)
 app.use(slugsRouter)
