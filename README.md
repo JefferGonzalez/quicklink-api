@@ -6,19 +6,19 @@ It uses **JWT-based authentication** and **cookie management** to manage user se
 
 ## Table of Contents
 
-- [Overview 📋](#quicklink-api--url-shortener-backend)
+- [📄 Overview](#quicklink-api--url-shortener-backend)
 
-  - [Getting Started 🚀](#getting-started-🚀)
+  - [🚀 Getting Started](#getting-started)
 
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Documentation](#documentation)
-    - [API Reference](#api-reference)
+    - [⚙️ Prerequisites](#prerequisites)
+    - [📦 Installation](#installation)
+    - [🧾 Documentation](#documentation)
+    - [🧩 API Reference](#api-reference)
 
-  - [Built With 🛠️](#built-with-🛠️)
-  - [License 📜](#license-📜)
+  - [🛠️ Built With](#built-with)
+  - [🪪 License](#license)
 
-## Getting Started 🚀
+## Getting Started
 
 ### Prerequisites
 
@@ -126,7 +126,7 @@ This section provides a quick overview of the main API endpoints.
 | `slug`        | `string` | **Required**. The unique identifier for the shortened URL |
 | `description` | `string` | Optional. A brief description of the URL                  |
 
-## Built With 🛠️
+## Built With
 
 - [Node.js](https://nodejs.org/) – JavaScript runtime
 - [Express.js](https://expressjs.com/) – Web framework for Node.js
@@ -136,6 +136,6 @@ This section provides a quick overview of the main API endpoints.
 - [JWT](https://jwt.io/) – JSON Web Tokens for authentication
 - [pnpm](https://pnpm.io/) - A fast, disk space-efficient package manager
 
-## License 📜
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
