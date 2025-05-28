@@ -11,7 +11,8 @@
     "dev": "npm run prisma:generate && tsx watch src/index.ts",
     "start": "node dist/index.js",
     "postinstall": "node scripts/copy-swagger-ui.js",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "lint": "eslint ."
   },
   "author": {
     "name": "Jefferson David González Cely",
