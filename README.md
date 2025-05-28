@@ -48,6 +48,9 @@ It uses **JWT-based authentication** and **cookie management** to manage user se
    ```
 
 4. **Configure environment variables**:
+
+   > **Important**: The environment variables must comply with the schema defined in [`/src/env.ts`](./src/env.ts). This ensures that all required variables have the correct types and formats for the application to run properly.
+
    Create a `.env` file in the root directory based on the `.env.example` file provided.
 
    - **JSON_WEB_TOKEN_SECRET**: A secret key for signing JWT tokens. You can generate a random string using `openssl rand -base64 32` or any other method.

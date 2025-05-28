@@ -1,7 +1,7 @@
 import { initAuth } from '@/auth/index.js'
-import config from '@/config.js'
 import { removeAll } from '@/controllers/slug.js'
 import { privateCors, publicCors } from '@/cors.js'
+import env from '@/env.js'
 import { tokenExtractor } from '@/middlewares/cookie.js'
 import { errorHandler } from '@/middlewares/errors.js'
 import authRouter from '@/routes/auth.js'
@@ -18,7 +18,7 @@ const app: Application = express()
 initAuth()
 
 // Settings
-app.set('port', String(config.PORT))
+app.set('port', String(env.SERVER_PORT))
 
 // Middlewares
 app.use(express.json())
@@ -29,7 +29,7 @@ setupSwagger(app)
 
 // Routes (Public)
 app.get('/', (_: Request, res: Response) => {
-  res.redirect(config.CLIENT_URL)
+  res.redirect(env.CLIENT_URL)
 })
 
 app.use('/slug', publicCors)
@@ -46,7 +46,7 @@ app.use(usersRouter)
 app.use(slugsRouter)
 
 app.use((req: Request, res: Response) => {
-  const page = config.CLIENT_URL + req.url
+  const page = env.CLIENT_URL + req.url
   res.redirect(page)
 })
 

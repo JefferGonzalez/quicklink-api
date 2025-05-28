@@ -1,5 +1,5 @@
-import config from '@/config.js'
 import prisma from '@/db/client.js'
+import env from '@/env.js'
 import { type Profile as UserProfile } from '@/schemas/Profile.js'
 import { type GitHubProfile } from '@/types.js'
 import { COOKIE_SETTINGS } from '@/utils/cookie.js'
@@ -62,9 +62,9 @@ export const findOrCreate = async (
     res
       .cookie('token', token, {
         ...COOKIE_SETTINGS,
-        maxAge: Number(config.SESSION_AGE)
+        maxAge: env.SESSION_AGE
       })
-      .redirect(config.CLIENT_URL)
+      .redirect(env.CLIENT_URL)
   } catch (error) {
     next(error)
   }

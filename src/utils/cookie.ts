@@ -1,10 +1,10 @@
-import config from '@/config.js'
+import env from '@/env.js'
 import type { CookieOptions } from 'express'
 
 export const COOKIE_SETTINGS: CookieOptions = {
-  domain: config.COOKIE_SETTINGS.domain,
-  httpOnly: config.COOKIE_SETTINGS.httpOnly,
+  domain: env.COOKIE_DOMAIN,
+  httpOnly: env.COOKIE_HTTP_ONLY,
   path: '/',
-  sameSite: config.COOKIE_SETTINGS.sameSite === 'none' ? 'none' : 'strict',
-  secure: config.COOKIE_SETTINGS.secure
+  sameSite: env.COOKIE_SAME_SITE,
+  secure: env.COOKIE_SECURE
 }

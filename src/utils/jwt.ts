@@ -1,4 +1,4 @@
-import config from '@/config.js'
+import env from '@/env.js'
 import { badImplementation, unauthorized } from '@hapi/boom'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 
@@ -8,8 +8,8 @@ export const generateToken = (userId: string): string => {
       sub: userId
     }
 
-    const token = jwt.sign(payload, config.JSON_WEB_TOKEN_SECRET, {
-      expiresIn: Number(config.SESSION_AGE)
+    const token = jwt.sign(payload, env.JSON_WEB_TOKEN_SECRET, {
+      expiresIn: Number(env.SESSION_AGE)
     })
 
     return token
@@ -20,7 +20,7 @@ export const generateToken = (userId: string): string => {
 
 export const verifyToken = (token: string): JwtPayload => {
   try {
-    const payload = jwt.verify(token, config.JSON_WEB_TOKEN_SECRET)
+    const payload = jwt.verify(token, env.JSON_WEB_TOKEN_SECRET)
 
     return payload as JwtPayload
   } catch {

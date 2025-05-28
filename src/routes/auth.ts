@@ -1,4 +1,4 @@
-import config from '@/config.js'
+import env from '@/env.js'
 import { findOrCreate } from '@/controllers/users.js'
 import { COOKIE_SETTINGS } from '@/utils/cookie.js'
 import { Router, type Request, type Response } from 'express'
@@ -17,7 +17,7 @@ router.get(
 router.get(
   '/github/callback',
   passport.authenticate('github', {
-    failureRedirect: config.FAILURE_REDIRECT_URL,
+    failureRedirect: env.FAILURE_REDIRECT_URL,
     session: false
   }),
   findOrCreate
@@ -34,7 +34,7 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    failureRedirect: config.FAILURE_REDIRECT_URL,
+    failureRedirect: env.FAILURE_REDIRECT_URL,
     session: false
   }),
   findOrCreate
