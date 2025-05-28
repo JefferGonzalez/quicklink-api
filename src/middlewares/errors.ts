@@ -8,7 +8,7 @@ export const errorHandler = (
   _: Request,
   res: Response,
   next: NextFunction
-): Response | void => {
+) => {
   if (error instanceof ZodError) {
     const { issues } = error
 
@@ -19,7 +19,7 @@ export const errorHandler = (
       }))
     }
 
-    return res.status(400).json(payload)
+    res.status(400).json(payload)
   }
 
   if (error instanceof Boom) {

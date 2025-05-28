@@ -16,7 +16,7 @@ export const findOrCreate = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const data: User | undefined = req.user
 
@@ -74,7 +74,7 @@ export const findOne = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const userId = req.userId
 
@@ -89,7 +89,7 @@ export const findOne = async (
 
     if (user === null) throw notFound('Not found')
 
-    return res.status(200).json({ data: user })
+    res.status(200).json({ data: user })
   } catch (error) {
     next(error)
   }
@@ -99,7 +99,7 @@ export const update = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const userId = req.userId
 
@@ -118,7 +118,7 @@ export const update = async (
       }
     })
 
-    return res.status(200).json({ data: user })
+    res.status(200).json({ data: user })
   } catch (error) {
     next(error)
   }
@@ -128,7 +128,7 @@ export const remove = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const userId = req.userId
 
@@ -136,7 +136,7 @@ export const remove = async (
       where: { id: userId }
     })
 
-    return res.status(204).end()
+    res.status(204).end()
   } catch (error) {
     next(error)
   }

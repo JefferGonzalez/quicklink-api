@@ -8,7 +8,7 @@ export const findAll = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const userId = req.userId
 
@@ -42,7 +42,7 @@ export const findAll = async (
       }
     }
 
-    return res.status(200).json(response)
+    res.status(200).json(response)
   } catch (error) {
     next(error)
   }
@@ -52,7 +52,7 @@ export const findOne = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   const { id } = req.params
   try {
     const userId = req.userId
@@ -70,7 +70,7 @@ export const findOne = async (
 
     if (slug === null) throw notFound('Not found')
 
-    return res.status(200).json({ data: slug })
+    res.status(200).json({ data: slug })
   } catch (error) {
     next(error)
   }
@@ -80,7 +80,7 @@ export const create = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const userId = req.userId
 
@@ -102,7 +102,7 @@ export const create = async (
       }
     })
 
-    return res.status(201).json({ data: newSlug })
+    res.status(201).json({ data: newSlug })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
@@ -119,7 +119,7 @@ export const update = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const userId = req.userId
 
@@ -142,7 +142,7 @@ export const update = async (
       }
     })
 
-    return res.status(200).json({ data: slug })
+    res.status(200).json({ data: slug })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2003' || error.code === 'P2023') {
@@ -159,7 +159,7 @@ export const remove = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const userId = req.userId
 
@@ -169,7 +169,7 @@ export const remove = async (
       where: { id, AND: { user_id: userId } }
     })
 
-    return res.status(204).json({ message: 'Slug deleted' })
+    res.status(204).json({ message: 'Slug deleted' })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2003' || error.code === 'P2023') {

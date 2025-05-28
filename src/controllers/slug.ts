@@ -8,7 +8,7 @@ export const getSlug = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   const { slug } = req.params
   try {
     const data = await prisma.slugs.findUnique({
@@ -31,7 +31,7 @@ export const getSlug = async (
     }
 
     if (data !== null) {
-      return res.status(200).json({ data })
+      res.status(200).json({ data })
     }
 
     if (free !== null) {
@@ -47,7 +47,7 @@ export const getSlug = async (
       }
     }
 
-    return res.status(200).json({ data: free })
+    res.status(200).json({ data: free })
   } catch (error) {
     next(error)
   }
@@ -57,7 +57,7 @@ export const create = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const { slug, url } = req.body as Slug
 
@@ -82,7 +82,7 @@ export const create = async (
       }
     })
 
-    return res.status(201).json({ data: newSlug })
+    res.status(201).json({ data: newSlug })
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
@@ -97,12 +97,12 @@ export const removeAll = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+) => {
   try {
     const token = `Bearer ${process.env.CRON_SECRET ?? ''}`
 
     if (req.headers.authorization !== token) {
-      return res.sendStatus(401)
+      res.sendStatus(401)
     }
 
     const date = new Date(Date.now())
@@ -115,7 +115,7 @@ export const removeAll = async (
       }
     })
 
-    return res.sendStatus(200)
+    res.sendStatus(200)
   } catch (error) {
     next(error)
   }
