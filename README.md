@@ -12,6 +12,8 @@ It uses **JWT-based authentication** and **cookie management** to manage user se
 
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
+    - [Documentation](#documentation)
+    - [API Reference](#api-reference)
 
   - [Built With 🛠️](#built-with-🛠️)
   - [License 📜](#license-📜)
@@ -89,6 +91,37 @@ It uses **JWT-based authentication** and **cookie management** to manage user se
    ```
 
    The server will start on `http://localhost:1234` by default.
+
+### Documentation
+
+For detailed documentation on how to use the QuickLink API, refer to the [API Documentation](https://api.quicklink.jeffer.dev/docs/).
+
+### API Reference
+
+This section provides a quick overview of the main API endpoints.
+🔗 **For full details, please refer to the complete [Swagger documentation](https://api.quicklink.jeffer.dev/docs/).**
+
+#### Get a short URL
+
+```http
+  GET /slug/{slug}
+```
+
+| Parameter | Type     | Description                             |
+| :-------- | :------- | :-------------------------------------- |
+| `slug`    | `string` | **Required**. Slug of the item to fetch |
+
+#### Create a short URL
+
+```http
+  POST /slug
+```
+
+| Parameter     | Type     | Description                                               |
+| :------------ | :------- | :-------------------------------------------------------- |
+| `url`         | `string` | **Required**. The original URL to be shortened            |
+| `slug`        | `string` | **Required**. The unique identifier for the shortened URL |
+| `description` | `string` | Optional. A brief description of the URL                  |
 
 ## Built With 🛠️
 
