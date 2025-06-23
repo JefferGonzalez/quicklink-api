@@ -40,7 +40,10 @@ export const findOrCreate = async (
           name: displayName,
           username: username ?? displayName,
           email,
-          photo: photos?.at(0)?.value
+          photo:
+            Array.isArray(photos) && photos.length > 0
+              ? photos[0].value
+              : undefined
         }
       })
 
