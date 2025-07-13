@@ -1,12 +1,23 @@
-import { create, findAll, findOne, remove, update } from '@/controllers/slugs.js'
+import {
+  create,
+  findAll,
+  findOne,
+  remove,
+  update
+} from '@/controllers/slugs.js'
 import { validateSchema } from '@/middlewares/validator.js'
-import { SlugId, SlugSchema, SlugSchemaWithoutSlug } from '@/schemas/Slug.js'
+import {
+  QuerySchema,
+  SlugId,
+  SlugSchema,
+  SlugSchemaWithoutSlug
+} from '@/schemas/Slug.js'
 import { Router } from 'express'
 
 const router = Router()
 
 router
-  .get('/slugs', findAll)
+  .get('/slugs', validateSchema(QuerySchema, 'query'), findAll)
   .get('/slugs/:id', validateSchema(SlugId, 'params'), findOne)
   .post('/slugs', validateSchema(SlugSchema, 'body'), create)
   .patch(

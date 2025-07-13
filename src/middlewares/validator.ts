@@ -3,7 +3,7 @@ import { type ZodTypeAny } from 'zod'
 
 export const validateSchema = (
   schema: ZodTypeAny,
-  property: 'params' | 'body'
+  property: 'params' | 'query' | 'body'
 ) => {
   return (req: Request, _: Response, next: NextFunction) => {
     try {

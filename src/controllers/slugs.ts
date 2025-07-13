@@ -12,13 +12,14 @@ export const findAll = async (
   try {
     const userId = req.userId
 
-    const { page = 0 } = req.query
+    const page = Number(req.query.page ?? 1) - 1
+    const skip = page * 6
 
     const slugs = await prisma.slugs.findMany({
       where: {
         user_id: userId
       },
-      skip: Number(page) * 6,
+      skip,
       take: 6,
       select: {
         id: true,

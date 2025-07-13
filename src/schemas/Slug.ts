@@ -1,5 +1,17 @@
 import * as z from 'zod'
 
+export const QuerySchema = z.object({
+  page: z
+    .string()
+    .transform(Number)
+    .pipe(
+      z.number().int().gte(1, {
+        message: 'Page must be an integer >= 1'
+      })
+    )
+    .optional()
+})
+
 export const SlugId = z.object({
   id: z
     .string({
