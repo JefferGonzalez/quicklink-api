@@ -54,7 +54,7 @@ export const findOne = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params
+  const { id } = req.params as { id: string }
   try {
     const userId = req.userId
 
@@ -124,7 +124,7 @@ export const update = async (
   try {
     const userId = req.userId
 
-    const { id } = req.params
+    const { id } = req.params as { id: string }
 
     const { url } = req.body as Slug
 
@@ -164,7 +164,7 @@ export const remove = async (
   try {
     const userId = req.userId
 
-    const { id } = req.params
+    const { id } = req.params as { id: string }
 
     await prisma.slugs.delete({
       where: { id, AND: { user_id: userId } }

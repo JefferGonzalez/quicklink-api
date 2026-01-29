@@ -9,7 +9,7 @@ export const getSlug = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { slug } = req.params
+  const { slug } = req.params as { slug: string }
   try {
     const data = await prisma.slugs.findUnique({
       where: { slug },
