@@ -34,8 +34,6 @@ const envSchema = z.object({
     .url('DATABASE_URL must be a valid URL')
     .min(1, 'DATABASE_URL cannot be empty'),
 
-  DIRECT_URL: z.string().url('DIRECT_URL must be a valid URL').optional(),
-
   GITHUB_CLIENT_ID: z
     .string({ required_error: 'GITHUB_CLIENT_ID is required' })
     .min(1, 'GITHUB_CLIENT_ID cannot be empty'),

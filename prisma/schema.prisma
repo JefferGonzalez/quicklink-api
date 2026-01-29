@@ -1,47 +1,43 @@
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/db/prisma"
-  moduleFormat = "esm"
+  provider = "prisma-client"
+  output   = "../src/db/prisma"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+}
+
+model accounts {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  provider    String @db.VarChar(12)
+  provider_id String @unique @db.VarChar(255)
+  user_id     String @db.Uuid
+  users       users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_users_accounts")
+}
+
+model slug {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  url        String   @db.VarChar(255)
+  slug       String   @unique @db.VarChar(255)
+  expired_at DateTime @db.Timestamp(6)
 }
 
 model slugs {
-  id          String   @id @default(uuid())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   url         String   @db.VarChar(255)
   slug        String   @unique @db.VarChar(255)
   description String   @default("No description") @db.VarChar(255)
-  created_at  DateTime @default(now()) @db.Timestamp(6)
-  user_id     String
-  user        users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  created_at  DateTime @default(dbgenerated("CURRENT_DATE")) @db.Timestamp(6)
+  user_id     String   @db.Uuid
+  users       users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_users_slugs")
 }
 
 model users {
-  id       String     @id @default(uuid())
+  id       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String     @db.VarChar(255)
   username String     @db.VarChar(255)
   email    String?    @db.VarChar(255)
   photo    String?    @db.VarChar(255)
-  slugs    slugs[]
   accounts accounts[]
-}
-
-model accounts {
-  id          String @id @default(uuid())
-  provider    String @db.VarChar(255)
-  provider_id String @unique @db.VarChar(255)
-  user_id     String @db.VarChar(255)
-  user        users  @relation(fields: [user_id], references: [id], onDelete: Cascade)
-}
-
-// Schema for the free tier
-model slug {
-  id         String   @id @default(uuid())
-  url        String   @db.VarChar(255)
-  slug       String   @unique @db.VarChar(255)
-  expired_at DateTime @db.Timestamp(6)
+  slugs    slugs[]
 }

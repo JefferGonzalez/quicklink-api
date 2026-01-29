@@ -29,7 +29,7 @@ export const findOrCreate = async (
 
     const account = await prisma.accounts.findUnique({
       where: { provider_id: id },
-      include: { user: true }
+      include: { users: true }
     })
 
     let userId: string

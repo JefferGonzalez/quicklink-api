@@ -4,3 +4,4 @@ dist/
 package-lock.json
 public/swagger-ui/
 src/db/prisma/
+/generated/prisma
