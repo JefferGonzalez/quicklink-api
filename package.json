@@ -23,6 +23,7 @@
   "bugs": {
     "url": "https://github.com/jefferGonzalez/quicklink-api/issues"
   },
+  "packageManager": "pnpm@10.28.2",
   "dependencies": {
     "@hapi/boom": "10.0.1",
     "@prisma/client": "6.10.1",
