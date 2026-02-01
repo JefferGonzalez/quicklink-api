@@ -1,24 +1,24 @@
-import { initAuth } from '@/auth/index.js'
-import { removeAll } from '@/controllers/slug.js'
-import { privateCors, publicCors } from '@/cors.js'
+import { privateCors } from '@/cors.js'
 import env from '@/env.js'
-import { tokenExtractor } from '@/middlewares/cookie.js'
+import { auth } from '@/lib/auth.js'
 import { errorHandler } from '@/middlewares/errors.js'
-import authRouter from '@/routes/auth.js'
-import slugRouter from '@/routes/slug.js'
-import slugsRouter from '@/routes/slugs.js'
-import usersRouter from '@/routes/users.js'
+import cronRouter from '@/routes/cron.js'
+import shortLinkRouter from '@/routes/short-link.js'
 import { setupSwagger } from '@/swagger.js'
+import { toNodeHandler } from 'better-auth/node'
 import cookieParser from 'cookie-parser'
 import express, { type Application, type Request, type Response } from 'express'
-import passport from 'passport'
 
 const app: Application = express()
 
-initAuth()
-
 // Settings
 app.set('port', String(env.SERVER_PORT))
+
+// CORS
+app.use(privateCors)
+
+// Better Auth
+app.all('/auth/{*any}', toNodeHandler(auth))
 
 // Middlewares
 app.use(express.json())
@@ -32,18 +32,10 @@ app.get('/', (_: Request, res: Response) => {
   res.redirect(env.CLIENT_URL)
 })
 
-app.use('/slug', publicCors)
-app.use(slugRouter)
-
 // Routes (Private)
-app.use('/cron/slugs', removeAll) // Vercel Cron Job
+app.use(cronRouter) // Vercel Cron Job
 
-app.use(privateCors)
-app.use('/auth', authRouter)
-
-app.use(passport.authenticate('jwt', { session: false }), tokenExtractor())
-app.use(usersRouter)
-app.use(slugsRouter)
+app.use(shortLinkRouter)
 
 app.use((req: Request, res: Response) => {
   const page = env.CLIENT_URL + req.url

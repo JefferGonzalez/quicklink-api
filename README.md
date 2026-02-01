@@ -1,8 +1,8 @@
 # QuickLink API | URL Shortener Backend
 
-**QuickLink API** is the backend service for the QuickLink URL shortener. Built with the **PERN stack** (PostgreSQL, Express, React, Node.js), this RESTful API handles authentication, link creation, and all interactions with the database.
+**QuickLink API** is the backend of the QuickLink URL shortener. Built with the **PERN stack** (PostgreSQL, Express, React, Node.js), it provides a REST API for authentication, short-link management, and database operations.
 
-It uses **JWT-based authentication** and **cookie management** to manage user sessions securely.
+It uses session-based authentication with secure cookies and supports both anonymous expiring links and user-managed links.
 
 ## Table of Contents
 
@@ -53,7 +53,8 @@ It uses **JWT-based authentication** and **cookie management** to manage user se
 
    Create a `.env` file in the root directory based on the `.env.example` file provided.
 
-   - **JSON_WEB_TOKEN_SECRET**: A secret key for signing JWT tokens. You can generate a random string using `openssl rand -base64 32` or any other method.
+   - **BETTER_AUTH_SECRET**: Generate a secure random string for this variable. You can use
+     `openssl rand -base64 32` or any other method.
 
    - **Github OAuth**:
 
@@ -73,7 +74,7 @@ It uses **JWT-based authentication** and **cookie management** to manage user se
 
      - Sign up at [neon](https://neon.tech/docs/get-started-with-neon/signing-up)
      - Create a PostgreSQL project and get your connection string
-     - Set the `DATABASE_URL` and `DIRECT_URL` variables in your `.env` file with that connection string
+     - Set the `DATABASE_URL` variable in your `.env` file with that connection string
 
    - **Using a local PostgreSQL instance:**
 
@@ -107,7 +108,7 @@ This section provides a quick overview of the main API endpoints.
 #### Get a short URL
 
 ```http
-  GET /slug/{slug}
+  GET /short-links/slug/{slug}
 ```
 
 | Parameter | Type     | Description                             |
@@ -117,7 +118,7 @@ This section provides a quick overview of the main API endpoints.
 #### Create a short URL
 
 ```http
-  POST /slug
+  POST /short-links
 ```
 
 | Parameter     | Type     | Description                                               |
@@ -133,7 +134,7 @@ This section provides a quick overview of the main API endpoints.
 - [TypeScript](https://www.typescriptlang.org/) – Superset of JavaScript for type safety
 - [Prisma](https://www.prisma.io/) – ORM for database interactions
 - [PostgreSQL](https://www.postgresql.org/) – Relational database
-- [JWT](https://jwt.io/) – JSON Web Tokens for authentication
+- [Better Auth](https://www.better-auth.com/) - Authentication and user management
 - [pnpm](https://pnpm.io/) - A fast, disk space-efficient package manager
 
 ## License

@@ -6,19 +6,10 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const envSchema = z.object({
-  NODE_ENV: z
-    .enum(['development', 'production'], {
-      required_error: 'NODE_ENV is required',
-      invalid_type_error:
-        'NODE_ENV must be either "development" or "production"'
-    })
-    .default('development'),
+  NODE_ENV: z.enum(['development', 'production']).default('development'),
 
   SERVER_PORT: z
-    .string({
-      required_error: 'SERVER_PORT is required',
-      invalid_type_error: 'SERVER_PORT must be a string'
-    })
+    .string()
     .default('3000')
     .transform((val) => parseInt(val, 10))
     .pipe(
@@ -29,76 +20,47 @@ const envSchema = z.object({
         .max(65535, 'SERVER_PORT must be less than or equal to 65535')
     ),
 
+  CLIENT_URL: z
+    .url({ message: 'CLIENT_URL must be a valid URL' })
+    .min(1, 'CLIENT_URL cannot be empty'),
+
   DATABASE_URL: z
-    .string({ required_error: 'DATABASE_URL is required' })
-    .url('DATABASE_URL must be a valid URL')
+    .url({ message: 'DATABASE_URL must be a valid URL' })
     .min(1, 'DATABASE_URL cannot be empty'),
 
-  GITHUB_CLIENT_ID: z
-    .string({ required_error: 'GITHUB_CLIENT_ID is required' })
-    .min(1, 'GITHUB_CLIENT_ID cannot be empty'),
+  BETTER_AUTH_SECRET: z
+    .string()
+    .min(10, 'BETTER_AUTH_SECRET must be at least 10 characters long'),
+
+  BETTER_AUTH_URL: z
+    .url({ message: 'BETTER_AUTH_URL must be a valid URL' })
+    .min(1, 'BETTER_AUTH_URL cannot be empty'),
+
+  GITHUB_CLIENT_ID: z.string().min(1, 'GITHUB_CLIENT_ID cannot be empty'),
 
   GITHUB_CLIENT_SECRET: z
-    .string({ required_error: 'GITHUB_CLIENT_SECRET is required' })
+    .string()
     .min(1, 'GITHUB_CLIENT_SECRET cannot be empty'),
 
-  GITHUB_CALLBACK_URL: z
-    .string({ required_error: 'GITHUB_CALLBACK_URL is required' })
-    .url('GITHUB_CALLBACK_URL must be a valid URL'),
-
-  FAILURE_REDIRECT_URL: z
-    .string({ required_error: 'FAILURE_REDIRECT_URL is required' })
-    .url('FAILURE_REDIRECT_URL must be a valid URL'),
-
-  GOOGLE_CLIENT_ID: z
-    .string({ required_error: 'GOOGLE_CLIENT_ID is required' })
-    .min(1, 'GOOGLE_CLIENT_ID cannot be empty'),
+  GOOGLE_CLIENT_ID: z.string().min(1, 'GOOGLE_CLIENT_ID cannot be empty'),
 
   GOOGLE_CLIENT_SECRET: z
-    .string({ required_error: 'GOOGLE_CLIENT_SECRET is required' })
+    .string()
     .min(1, 'GOOGLE_CLIENT_SECRET cannot be empty'),
 
-  GOOGLE_CALLBACK_URL: z
-    .string({ required_error: 'GOOGLE_CALLBACK_URL is required' })
-    .url('GOOGLE_CALLBACK_URL must be a valid URL'),
-
-  JSON_WEB_TOKEN_SECRET: z
-    .string({ required_error: 'JSON_WEB_TOKEN_SECRET is required' })
-    .min(10, 'JSON_WEB_TOKEN_SECRET must be at least 10 characters long'),
-
-  SESSION_AGE: z
+  CRON_SECRET: z
     .string()
-    .default('86400000')
-    .transform((val) => parseInt(val, 10))
-    .pipe(z.number().int().min(1, 'SESSION_AGE must be a positive number')),
-
-  COOKIE_HTTP_ONLY: z
-    .string()
-    .transform((val) => val === 'true')
-    .default('true'),
-
-  COOKIE_PATH: z.string().default('/'),
-
-  COOKIE_SAME_SITE: z.enum(['strict', 'lax', 'none']).default('strict'),
-
-  COOKIE_SECURE: z
-    .string()
-    .transform((val) => val === 'true')
-    .default('false'),
-
-  COOKIE_DOMAIN: z.string().default('localhost'),
-
-  CLIENT_URL: z.string().url('CLIENT_URL must be a valid URL').default('')
+    .min(10, 'CRON_SECRET must be at least 10 characters long')
 })
 
 const parsed = envSchema.safeParse(process.env)
 
 if (!parsed.success) {
-  const validationErrors = parsed.error.flatten().fieldErrors
+  const result = z.treeifyError(parsed.error)
 
   console.error('❌ Invalid environment variables.')
   if (process.env.NODE_ENV !== 'production') {
-    console.error(validationErrors)
+    console.error(result.properties)
   }
 
   process.exit(1)

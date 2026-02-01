@@ -1,8 +1,8 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { type ZodTypeAny } from 'zod'
+import { type ZodType } from 'zod'
 
 export const validateSchema = (
-  schema: ZodTypeAny,
+  schema: ZodType,
   property: 'params' | 'query' | 'body'
 ) => {
   return (req: Request, _: Response, next: NextFunction) => {

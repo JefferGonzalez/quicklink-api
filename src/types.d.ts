@@ -1,6 +1,6 @@
 interface Errors {
   message: string
-  path?: (string | number)[]
+  path?: (string | number | symbol)[]
 }
 
 export interface PayloadError {
@@ -8,61 +8,32 @@ export interface PayloadError {
   stack?: string
 }
 
-export interface GitHubProfile {
-  id: string
-  nodeId: string
-  displayName: string
-  username: string
-  profileUrl: string
-  photos: Photo[]
-  provider: string
-  _raw: string
-  _json: JSON
-}
-
-interface JSON {
-  login: string
-  id: number
-  node_id: string
-  avatar_url: string
-  gravatar_id: string
-  url: string
-  html_url: string
-  followers_url: string
-  following_url: string
-  gists_url: string
-  starred_url: string
-  subscriptions_url: string
-  organizations_url: string
-  repos_url: string
-  events_url: string
-  received_events_url: string
-  type: string
-  site_admin: boolean
-  name: string
-  company: string
-  blog: string
-  location: null
-  email: null
-  hireable: boolean
-  bio: null
-  twitter_username: string
-  public_repos: number
-  public_gists: number
-  followers: number
-  following: number
-  created_at: Date
-  updated_at: Date
-}
-
-interface Photo {
-  value: string
-}
-
 declare global {
   namespace Express {
-    interface Request {
+    interface User {
+      id: string
+      createdAt: Date
+      updatedAt: Date
+      email: string
+      emailVerified: boolean
+      name: string
+      image?: string | null
+    }
+
+    interface Session {
+      id: string
+      createdAt: Date
+      updatedAt: Date
       userId: string
+      expiresAt: Date
+      token: string
+      ipAddress?: string | null
+      userAgent?: string | null
+    }
+
+    interface Request {
+      user?: User | null
+      session: Session | null
     }
   }
 }

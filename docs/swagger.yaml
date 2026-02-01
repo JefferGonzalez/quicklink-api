@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: QuickLink API | URL Shortener Backend
   version: 1.0.0
-  description: QuickLink API is the backend service for the QuickLink URL shortener. Built with the PERN stack (PostgreSQL, Express, React, Node.js), this RESTful API handles authentication, link creation, and all interactions with the database. It uses JWT-based authentication and cookie management to manage user sessions securely.
+  description: QuickLink API is the backend of the QuickLink URL shortener. Built with the PERN stack (PostgreSQL, Express, React, Node.js), it provides a REST API for authentication, short-link management, and database operations. It uses session-based authentication with secure cookies and supports both anonymous expiring links and user-managed links.
   license:
     name: MIT
     url: https://github.com/JefferGonzalez/quicklink-api/blob/main/LICENSE
@@ -11,13 +11,13 @@ info:
     url: https://www.jeffer.dev
     email: jeffersongonzalezcely@hotmail.com
 tags:
-  - name: Slug
+  - name: Short Link
     description: Short URL management
 paths:
-  /slug/{slug}:
+  /short-links/slug/{slug}:
     get:
       tags:
-        - Slug
+        - Short Link
       summary: Get a short URL
       description: Retrieve a short URL by its slug.
       parameters:
@@ -63,10 +63,10 @@ paths:
                         message:
                           type: string
                           example: Not found
-  /slug:
+  /short-links:
     post:
       tags:
-        - Slug
+        - Short Link
       summary: Create a short URL
       description: Generates a new short URL slug.
       requestBody:
@@ -74,7 +74,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Slug'
+              $ref: '#/components/schemas/Short Link'
       responses:
         '201':
           description: Short URL created successfully.
@@ -110,14 +110,12 @@ paths:
                             type: string
               example:
                 errors:
-                  - message: 'URL must be at least 1 character long'
-                    path: ['url']
                   - message: 'URL must be a valid URL'
                     path: ['url']
                   - message: 'Slug must be at least 1 character long'
                     path: ['slug']
         '409':
-          description: Slug already exists
+          description: Short Link already exists
           content:
             application/json:
               schema:
@@ -133,7 +131,7 @@ paths:
                           example: Slug already exists
 components:
   schemas:
-    Slug:
+    Short Link:
       type: object
       required:
         - url

@@ -7,37 +7,86 @@ datasource db {
   provider = "postgresql"
 }
 
-model accounts {
-  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  provider    String @db.VarChar(12)
-  provider_id String @unique @db.VarChar(255)
-  user_id     String @db.Uuid
-  users       users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_users_accounts")
+enum ShortLinkOwnership {
+  ANONYMOUS
+  USER
 }
 
-model slug {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  url        String   @db.VarChar(255)
-  slug       String   @unique @db.VarChar(255)
-  expired_at DateTime @db.Timestamp(6)
+model ShortLink {
+  id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  url  String @db.VarChar(255)
+  slug String @unique @db.VarChar(255)
+
+  expired_at DateTime? @db.Timestamp(6)
+
+  description String?  @db.VarChar(255)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  user_id     String?
+  User        User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  type ShortLinkOwnership @default(ANONYMOUS)
+
+  @@map("short_links")
 }
 
-model slugs {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  url         String   @db.VarChar(255)
-  slug        String   @unique @db.VarChar(255)
-  description String   @default("No description") @db.VarChar(255)
-  created_at  DateTime @default(dbgenerated("CURRENT_DATE")) @db.Timestamp(6)
-  user_id     String   @db.Uuid
-  users       users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_users_slugs")
+model User {
+  id            String      @id
+  name          String
+  email         String      @unique
+  emailVerified Boolean     @default(false)
+  image         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  shortLinks    ShortLink[]
+
+  @@map("users")
 }
 
-model users {
-  id       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String     @db.VarChar(255)
-  username String     @db.VarChar(255)
-  email    String?    @db.VarChar(255)
-  photo    String?    @db.VarChar(255)
-  accounts accounts[]
-  slugs    slugs[]
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verifications")
 }

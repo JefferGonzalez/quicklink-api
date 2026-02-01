@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/cron/slugs",
+      "path": "/cron/short-links",
       "schedule": "0 12 * * *"
     }
   ]
